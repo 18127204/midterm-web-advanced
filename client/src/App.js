@@ -13,6 +13,9 @@ const App = ()=> {
         <Switch>
           <Route exact path='/' component={Login}/>
           <Route exact path='/register' component= {Register}/>
+          <Route path='/classroom' component={ClassRoom}/>
+          <Route path='/profile' component={ViewProfile}/>
+
           <Route path='*' component={Login}/>
           
         </Switch>
