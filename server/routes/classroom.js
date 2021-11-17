@@ -3,63 +3,38 @@ var router=express.Router();
 var pool=require('./pool');
 var passport=require('../modules/passport');
 
-/*Get all list classroom */
-router.get('/api/GetALLListClassroom', function(req, res, next) {
-    pool.query('select * from classroom',(error,result)=>{
+
+
+/*Get all list classroom with check param: idNguoiThamGia F */
+router.get('/api/GetALLListClassroom/:idNguoiThamGia', function(req, res, next) {
+    let idNTGia=req.params.idNguoiThamGia;
+    let sql='select distinct tenlophoc,phan,chude,phong,duonglink from classroom where id_nguoithamgia= ? or id_chuphong=?'
+    pool.query(sql,[idNTGia,idNTGia],(error,result)=>{
         if(error){
             res.send(error);
         }
         else{
+            // console.log('GetALLLis: ',result);
             res.json(result);
-            console.log(result);
+            
         }   
     });
 });
-/*Create classroom */  
+
+/*Create classroom F*/  
 router.post('/api/AddNewClassroom', function(req, res, next) {
-    let id=req.body.id;
-    let tenLop=req.body.tenLop;
-    let sql="INSERT INTO ClassRoomManager VALUES('"+id+"', '"+tenLop+"')";
-    pool.query(sql,
-        (err, result) => {
-         if (err) return next(err);
-        }
-        
+    let {id_nguoithamgia,tenlophoc,phan,chude,phong,duonglink,id_chuphong}=req.body;
+    let sqlNewClass="insert into classroom (id_nguoithamgia,tenlophoc,phan,chude,phong,duonglink,id_chuphong) values(?,?,?,?,?,?,?)";
+    pool.query(sqlNewClass,[id_nguoithamgia,tenlophoc,phan,chude,phong,duonglink,id_chuphong],(err, result) => {
+         if (err){
+            res.json({message:'add new class fail'});
+         }
+         else{
+            //  console.log('kq insert class',result);
+            res.json({message:'add new class success'});
+         }
+    }   
        );
 
 });
-/*Test data protect */
-router.get('/testLopHoc',(req,res,next)=>{
-    res.json([
-        {
-            id:1,
-            name:'toan'
-        },
-        {
-            id:2,
-            name:'van'
-        },
-        {
-            id:3,
-            name:'anhvan'
-        }
-    ])
-})
-
-/*get value from account */  
-router.get('/account/:id', function(req, res, next) {
-
-    let sql='select * from account where id=?';
-    pool.query(sql,[req.params.id],(error,result)=>{
-        if(error){
-            res.send(error);
-        }
-        else{
-            res.json(result);
-            console.log(result);
-        }   
-    });
-
-});
-
 module.exports= router;

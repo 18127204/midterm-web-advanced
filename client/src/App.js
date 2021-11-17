@@ -5,6 +5,7 @@ import Login from './pages/Login/Login';
 import ClassRoom from './pages/Classroom/ClassRoom';
 import ViewProfile from './pages/ViewProfile/ViewProfile';
 import Register from './pages/Register/Register';
+import DetailEachClass from './pages/Classroom/DetailEachClass';
 
 const App = ()=> {
   return (
@@ -13,9 +14,9 @@ const App = ()=> {
         <Switch>
           <Route exact path='/' component={Login}/>
           <Route exact path='/register' component= {Register}/>
-          <Route path='/classroom' component={ClassRoom}/>
-          <Route path='/profile' component={ViewProfile}/>
-
+          <Route exact path='/classroom' component={ClassRoom}/>
+          <Route exact path='/profile' component={ViewProfile}/>
+          <Route exact path='/classroom/:duonglink' component={DetailEachClass}/>
           <Route path='*' component={Login}/>
           
         </Switch>

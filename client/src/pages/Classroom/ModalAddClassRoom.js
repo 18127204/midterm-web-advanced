@@ -9,7 +9,6 @@ export default class ModalAddClassRoom extends Component {
                 phan:'',
                 chude:'',
                 phong:'',
-                duonglink:'',
             }
         }
     }
@@ -25,7 +24,7 @@ export default class ModalAddClassRoom extends Component {
 
 
     handleSubmit = (e) => {
-        // e.preventDefault();
+        e.preventDefault();
         this.props.addClass(this.state.valuesForm);
     }
     render() {
@@ -35,33 +34,33 @@ export default class ModalAddClassRoom extends Component {
                     <div className="modal-dialog" role="document">
                         <div className="modal-content">
                             <div className="modal-header">
-                                <h5 className="modal-title">Create class</h5>
+                                <h5 className="modal-title">Tạo lớp học</h5>
                                 <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">×</span>
                                 </button>
                             </div>
                             <form>
-                                <div classname="modal-body">
+                                <div className="modal-body">
                                     <div className="form-group">
-                                        <p>Class name (require)</p>
-                                        <input type="text" classname="form-control" name="tenLop" onChange={this.handleChange} required />
+                                        <p>Tên lớp học (*)</p>
+                                        <input type="text" className="form-control" name="tenlophoc" onChange={this.handleChange} required />
                                     </div>
                                     <div className="form-group">
-                                        <p>Section</p>
-                                        <input type="text" classname="form-control" onChange={this.handleChange} />
+                                        <p>Phần</p>
+                                        <input type="text" className="form-control" name="phan" onChange={this.handleChange} />
                                     </div>
                                     <div className="form-group">
-                                        <p>Subject</p>
-                                        <input type="text" classname="form-control" />
+                                        <p>Chủ đề</p>
+                                        <input type="text" className="form-control" name="chude" onChange={this.handleChange}/>
                                     </div>
                                     <div className="form-group">
-                                        <p>Room</p>
-                                        <input type="text" classname="form-control" />
+                                        <p>Phòng</p>
+                                        <input type="text" className="form-control" name="phong" onChange={this.handleChange}/>
                                     </div>
                                 </div>
                                 <div className="modal-footer">
-                                    <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-                                    <button type="submit" className="btn btn-primary" onClick={this.handleSubmit}>Save</button>
+                                    <button type="button" className="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                                    <button type="submit" className="btn btn-primary" onClick={this.handleSubmit}>Tạo</button>
                                 </div>
 
                             </form>
