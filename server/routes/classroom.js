@@ -3,19 +3,6 @@ var router=express.Router();
 var pool=require('./pool');
 var passport=require('../modules/passport');
 
-// /*Get all list classroom F */
-// router.get('/api/GetALLListClassroom', function(req, res, next) {
-//     pool.query('select distinct tenlophoc,phan,chude,phong,duonglink from classroom',(error,result)=>{
-//         if(error){
-//             res.send(error);
-//         }
-//         else{
-//             res.json(result);
-//             console.log(result);
-//         }   
-//     });
-// });
-
 /*Get all list classroom with check param: idNguoiThamGia F */
 router.get('/api/GetALLListClassroom/:idNguoiThamGia', function(req, res, next) {
     let idNTGia=req.params.idNguoiThamGia;
@@ -52,7 +39,7 @@ router.post('/api/AddNewClassroom', function(req, res, next) {
 /*Get value detail classroom based on link F */  
 router.get('/api/detailClassroom/:duonglink', function(req, res, next) {
     let linkFind='/classroom/'+req.params.duonglink;
-    let sql='select distinct tenlophoc,phan,chude,phong,duonglink from classroom where duonglink=? ';
+    let sql='select distinct id,tenlophoc,phan,chude,phong,duonglink,id_chuphong from classroom where duonglink=? limit 1';
     console.log('duong link  ',linkFind);
     pool.query(sql,[linkFind],(error,result)=>{
         if(error){
@@ -134,38 +121,5 @@ router.post('/api/AddPeopleClassroom', function(req, res, next) {
        );
 
 });
-// /*Test data protect */
-// router.get('/testLopHoc',(req,res,next)=>{
-//     res.json([
-//         {
-//             id:1,
-//             name:'toan'
-//         },
-//         {
-//             id:2,
-//             name:'van'
-//         },
-//         {
-//             id:3,
-//             name:'anhvan'
-//         }
-//     ])
-// })
-
-// /*get value from account */  
-// router.get('/account/:id', function(req, res, next) {
-
-//     let sql='select * from account where id=?';
-//     pool.query(sql,[req.params.id],(error,result)=>{
-//         if(error){
-//             res.send(error);
-//         }
-//         else{
-//             res.json(result);
-//             console.log(result);
-//         }   
-//     });
-
-// });
 
 module.exports= router;

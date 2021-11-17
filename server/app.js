@@ -6,14 +6,15 @@ var logger = require('morgan');
 var cors=require('cors');
 var bodyParser=require('body-parser');
 var passport=require('./modules/passport');
+var nodemailer = require('nodemailer');
 
 //init router
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var classRoomRouter=require('./routes/classroom');
-// var loginRouter=require('./routes/login');
 var loginRouter=require('./modules/passport/loginRouter');
 var registerRouter=require('./routes/register');
+var sendEmailRouter=require('./routes/sendemail');
 var app = express();
 
 // view engine setup
@@ -38,7 +39,7 @@ app.use('/users', usersRouter);
 app.use('/classroom',passport.authenticate('jwt', { session: false }),classRoomRouter);
 app.use('/login',loginRouter);
 app.use('/register',registerRouter);
-
+app.use('/sendEmail',passport.authenticate('jwt', { session: false }),sendEmailRouter);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

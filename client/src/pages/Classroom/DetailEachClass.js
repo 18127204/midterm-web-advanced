@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
 import HeaderClassRoom from '../../components/HeaderClassRoom/HeaderClassRoom';
 import { Redirect } from 'react-router';
-import {URL_API,URL_FRONTEND,INFO,TOKEN} from '../../SettingValue';
+import {URL_API,URL_FRONTEND,INFO,TOKEN,INFCLASS} from '../../SettingValue';
 import Axios from 'axios';
+import ModalAddStudent from './ModalAddStudent';
+import ModalAddTeacher from './ModalAddTeacher';
 export default class DetailEachClass extends Component {
     constructor(props) {
         super(props);
@@ -23,7 +25,8 @@ export default class DetailEachClass extends Component {
             // console.log('infor class',res.data);
             this.setState({
                 infoClass:res.data[0]
-            })
+            });
+            localStorage.setItem(INFCLASS,JSON.stringify(res.data[0]));
             // console.log('get infor class oke',this.state.infoClass);
         });
         promise.catch((error)=>{
@@ -99,6 +102,45 @@ export default class DetailEachClass extends Component {
         }
 
     }
+
+    handleInvitedTeacher=(info)=>{
+        let infoCourse=JSON.parse(localStorage.getItem(INFCLASS));
+        let dataSend={...info,...infoCourse};
+
+        let promise=Axios({
+            method:'POST',
+            url:`${URL_API}/sendEmail/SendEmailTeacher`,
+            data:dataSend,
+            headers:{'Authorization':'Bearer '+localStorage.getItem(TOKEN) }
+        });
+        promise.then((res)=>{
+            console.log('oke p1');
+            this.getAllListTeachers();
+        });
+        promise.catch((error)=>{
+            console.log('get infor student that bai',error);
+        });
+
+    }
+
+    handleInvitedStudent=(info)=>{
+        let infoCourse=JSON.parse(localStorage.getItem(INFCLASS));
+        let dataSend={...info,...infoCourse};
+        let promise=Axios({
+            method:'POST',
+            url:`${URL_API}/sendEmail/SendEmailStudent`,
+            data:dataSend,
+            headers:{'Authorization':'Bearer '+localStorage.getItem(TOKEN) }
+        });
+        promise.then((res)=>{
+            console.log('oke p1');
+            this.getAllListStudents();
+        });
+        promise.catch((error)=>{
+            console.log('get infor student that bai',error);
+        });
+    }
+
     render() {
         return (
             <div>
@@ -125,6 +167,7 @@ export default class DetailEachClass extends Component {
                                     <thead>
                                         <tr>
                                             <th>Giáo viên</th>
+                                            <th><button className='btn btn-success' data-toggle="modal" data-target="#modelIdAddTeacher">Mời giáo viên</button></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -137,6 +180,7 @@ export default class DetailEachClass extends Component {
                                     <thead>
                                         <tr>
                                             <th>Học sinh</th>
+                                            <th><button className='btn btn-success'  data-toggle="modal" data-target="#modelIdAddStudent">Mời học sinh</button></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -147,7 +191,8 @@ export default class DetailEachClass extends Component {
                         </div>
                     </div>
                 </div>
-
+                <ModalAddTeacher invitedTeacher={this.handleInvitedTeacher}/>
+                <ModalAddStudent invitedStudent={this.handleInvitedStudent}/>
             </div>
 
         )

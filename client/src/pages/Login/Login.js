@@ -41,23 +41,22 @@ export default function Login(props) {
     }
     return (
         <div>
-            <form onSubmit={handleLogin}>
-                <div className="form-group">
-                    <label>Username</label>
-                    <input type="text" name="username" className="form-control" onChange={handleInput} />
-                </div>
-                <div className="form-group">
-                    <label>Password</label>
-                    <input type="password" name="password" className="form-control" onChange={handleInput} />
-                </div>
-
-                <div className="form-group">
-                    <button className="btn btn-danger" onClick={handleLogin}>Đăng nhập</button>
-                </div>
-            </form>
-            <div className="form-group">
-                <button className="btn btn-danger" onClick={handleRegister}>Đăng ký</button>
+            <div className="container">
+                <h2 className='text-center'>Đăng nhập</h2>
+                <form>
+                    <div className="form-group">
+                        <label>Username</label>
+                        <input type="text" name="username" className="form-control" onChange={handleInput} />
+                    </div>
+                    <div className="form-group">
+                        <label>Password:</label>
+                        <input type="password" name="password" className="form-control" onChange={handleInput} />
+                    </div>
+                    <button className="btn btn-primary" onClick={handleLogin}>Đăng nhập</button>
+                    <button className="btn btn-success" onClick={handleRegister}>Đăng ký</button>
+                </form>
             </div>
+
         </div>
 
     );

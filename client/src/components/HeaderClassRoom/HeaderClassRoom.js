@@ -1,11 +1,12 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { INFO, TOKEN } from '../../SettingValue';
+import { INFO, TOKEN,INFCLASS } from '../../SettingValue';
 import { Redirect } from 'react-router';
 export default function HeaderClassRoom(props) {
     const handleLogOut = () => {
         localStorage.removeItem(TOKEN);
         localStorage.removeItem(INFO);
+        localStorage.removeItem(INFCLASS);
     }
     if (localStorage.getItem(TOKEN)) {
         return (
