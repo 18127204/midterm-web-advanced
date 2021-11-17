@@ -3,6 +3,18 @@ var router=express.Router();
 var pool=require('./pool');
 var passport=require('../modules/passport');
 
+// /*Get all list classroom F */
+// router.get('/api/GetALLListClassroom', function(req, res, next) {
+//     pool.query('select distinct tenlophoc,phan,chude,phong,duonglink from classroom',(error,result)=>{
+//         if(error){
+//             res.send(error);
+//         }
+//         else{
+//             res.json(result);
+//             console.log(result);
+//         }   
+//     });
+// });
 
 /*Get all list classroom with check param: idNguoiThamGia F */
 router.get('/api/GetALLListClassroom/:idNguoiThamGia', function(req, res, next) {
@@ -87,5 +99,73 @@ router.get('/api/studentClassroom/:duonglink', function(req, res, next) {
 
 });
 
+/*Join classroom by link F*/
+router.get('/api/joinClassroom/:duonglink', function(req, res, next) {
+    let linkFind='/classroom/'+req.params.duonglink;
+    let sqlFindLink='select distinct tenlophoc,phan,chude,phong,duonglink from classroom where duonglink=?';
+
+    pool.query(sqlFindLink,[linkFind],(error,result)=>{
+        if(error){
+            res.send(error);
+        }
+        else{
+            console.log('join thanh cong',result);
+            res.json(result);
+            
+        }   
+    });
+
+});
+/*add people to classroom by id F*/
+router.post('/api/AddPeopleClassroom', function(req, res, next) {
+    let {id_nguoithamgia,duonglink}=req.body;
+    let linkFind='/classroom/'+duonglink;
+    let sqlFindClass="insert into classroom (id,tenlophoc,phan,chude,phong,duonglink,id_chuphong,id_nguoithamgia) select id,tenlophoc,phan,chude,phong,duonglink,id_chuphong,? from classroom where duonglink=? limit 1";
+    pool.query(sqlFindClass,[id_nguoithamgia,linkFind],(err, result) => {
+         if (err){
+            console.log('add people class fail');
+            res.json({message:'add people class fail'});
+         }
+         else{
+            console.log('add people class success',result);
+            res.json({message:'add people success'});
+         }
+    }   
+       );
+
+});
+// /*Test data protect */
+// router.get('/testLopHoc',(req,res,next)=>{
+//     res.json([
+//         {
+//             id:1,
+//             name:'toan'
+//         },
+//         {
+//             id:2,
+//             name:'van'
+//         },
+//         {
+//             id:3,
+//             name:'anhvan'
+//         }
+//     ])
+// })
+
+// /*get value from account */  
+// router.get('/account/:id', function(req, res, next) {
+
+//     let sql='select * from account where id=?';
+//     pool.query(sql,[req.params.id],(error,result)=>{
+//         if(error){
+//             res.send(error);
+//         }
+//         else{
+//             res.json(result);
+//             console.log(result);
+//         }   
+//     });
+
+// });
 
 module.exports= router;

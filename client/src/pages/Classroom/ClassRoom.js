@@ -79,6 +79,44 @@ export default class ClassRoom extends Component {
         }
     }
 
+    handleJoinClass=(inputLink)=>{
+        let tempClass=[...this.state.listClassRoom];
+        let id_nguoithamgia=JSON.parse(localStorage.getItem(INFO)).id;
+
+        let words=inputLink.split('/');
+        let resultFind=words[words.length-1];
+
+        let promise=Axios({
+            method:'GET',
+            url:`${URL_API}/classroom/api/joinClassroom/${resultFind}`,
+            headers:{'Authorization':'Bearer '+localStorage.getItem(TOKEN) }
+        });
+        promise.then((result)=>{
+            console.log('Vào lớp oke',result.data);
+            tempClass.push(result.data[0]);
+            this.setState({
+                listClassRoom:tempClass
+            });
+
+            let promise1=Axios({
+                method:'POST',
+                url:`${URL_API}/classroom/api/AddPeopleClassroom`,
+                data:{id_nguoithamgia:id_nguoithamgia,duonglink:resultFind},
+                headers:{'Authorization':'Bearer '+localStorage.getItem(TOKEN) }
+            });
+            promise1.then((res)=>{
+                console.log('add people to class thanh cong');
+            });
+            promise1.catch((error)=>{
+                console.log('add people to class that bai',error);
+            })
+
+        });
+        promise.catch((error)=>{
+            console.log('tao class that bai',error);
+        });
+
+    }
     render(){
         if(localStorage.getItem(TOKEN)){
             return (
