@@ -90,6 +90,7 @@ export default class ClassRoom extends Component {
                         </div>
                     </div>
                     <ModalAddClassRoom addClass={this.handleAddNewClass}/>
+                    <ModalJoinClassRoom joinClass={this.handleJoinClass}/>
                 </div>
             )
             

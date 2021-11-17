@@ -4,7 +4,6 @@ var pool=require('./pool');
 var passport=require('../modules/passport');
 
 
-
 /*Get all list classroom with check param: idNguoiThamGia F */
 router.get('/api/GetALLListClassroom/:idNguoiThamGia', function(req, res, next) {
     let idNTGia=req.params.idNguoiThamGia;
@@ -37,4 +36,56 @@ router.post('/api/AddNewClassroom', function(req, res, next) {
        );
 
 });
+
+/*Get value detail classroom based on link F */  
+router.get('/api/detailClassroom/:duonglink', function(req, res, next) {
+    let linkFind='/classroom/'+req.params.duonglink;
+    let sql='select distinct tenlophoc,phan,chude,phong,duonglink from classroom where duonglink=? ';
+    console.log('duong link  ',linkFind);
+    pool.query(sql,[linkFind],(error,result)=>{
+        if(error){
+            res.send(error);
+        }
+        else{
+            res.json(result);
+            // console.log(result);
+        }   
+    });
+
+});
+
+/*Get teachers in classroom based on link F */
+router.get('/api/teacherClassroom/:duonglink', function(req, res, next) {
+    let linkFind='/classroom/'+req.params.duonglink;
+    let sql='select * from infomation where id in (select distinct id_chuphong from classroom where duonglink=?)';
+    pool.query(sql,[linkFind],(error,result)=>{
+        if(error){
+            res.send(error);
+        }
+        else{
+            res.json(result);
+            // console.log(result);
+        }   
+    });
+
+});
+
+/*Get students in classroom based on link F*/
+router.get('/api/studentClassroom/:duonglink', function(req, res, next) {
+    let linkFind='/classroom/'+req.params.duonglink;
+    let sql='select * from infomation where id in (select distinct id_nguoithamgia from classroom where duonglink=? and id_nguoithamgia not in (select distinct id_chuphong from classroom where duonglink=?))';
+
+    pool.query(sql,[linkFind,linkFind],(error,result)=>{
+        if(error){
+            res.send(error);
+        }
+        else{
+            res.json(result);
+            // console.log(result);
+        }   
+    });
+
+});
+
+
 module.exports= router;
